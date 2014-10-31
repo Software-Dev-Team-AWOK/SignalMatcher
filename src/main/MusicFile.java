@@ -48,5 +48,7 @@ public abstract class MusicFile {
 		
 		public abstract void makeSamples();
 		
+		public abstract float getSamplingRate();
+		
 
 }
