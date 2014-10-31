@@ -19,9 +19,9 @@ public class LAME {
 		Process lameP = null;
 		try{
 			lameP = lamePB.start();
-			lameP.wait();
+			lameP.waitFor();
 		}catch (Exception e){
-			System.out.println("ERROR: "+ e.getMessage());
+			System.out.println("ERROR: Error converting MP3 to WAV: "+ e.getMessage());
 			System.exit(1);
 		}
 	}
