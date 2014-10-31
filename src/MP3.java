@@ -1,27 +1,23 @@
-    import java.io.DataInputStream;
-    import java.io.File;
-    import java.io.FileInputStream;
-    import java.io.FileNotFoundException;
-    import java.io.IOException;
-    import java.nio.ByteBuffer;
-    import java.nio.ByteOrder;
-    import java.util.Arrays;
-    
-    import javax.sound.sampled.AudioFileFormat;
-    import javax.sound.sampled.AudioFormat;
-    import javax.sound.sampled.AudioInputStream;
-    import javax.sound.sampled.AudioSystem;
-    import javax.sound.sampled.UnsupportedAudioFileException;
-    
-    
-    import org.omg.CORBA.DoubleSeqHelper;
-    // Represents a given WAVE file
-    public class Wav {
-    	// File Path
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+// Represents a given WAVE file
+public class MP3 {
+        // File Path
     private String path;
-    // This WAVE file
+    // This MP3 file
     private File file;
-    // This WAVE file's type, length in bytes, 
+    //Decoded PCM AudioInputStream
+    private AudioInputStream PCM_STREAM;
+    // This MP3 file's type, length in bytes, 
     // length in sample frames, and format
     private AudioFileFormat format;
     // This WAVE file's type
@@ -42,32 +38,54 @@
     private double[] samples;
     // Constructs a WAVE file, and throws an exception
     // if the given audio file is not of type WAVE
-    Wav(String path) throws Exception {
+    MP3(String path) throws Exception {
         this.file = new File(path);
         this.path = path;
-        if (!this.isWavFile()) {
+        if (!this.isMP3File()) {
             throw new Exception("ERROR: " + file.getName() + 
                     " is not a supported format");
         }
         else {
+            format = AudioSystem.getAudioFileFormat(file);
+            type = format.getType();
+            audioFormat =  format.getFormat();  
+            decodeFormat();
             readFile();
             makeMono();
             makeSamples();
         }
     }
-
+    private void decodeFormat() {
+        try {
+            AudioInputStream in = AudioSystem.getAudioInputStream(file);
+            AudioFormat baseFormat = in.getFormat();
+            AudioFormat decodedFormat = new AudioFormat
+                                        (AudioFormat.Encoding.PCM_SIGNED,
+                                        baseFormat.getSampleRate(),
+                                        16,
+                                        baseFormat.getChannels(),
+                                        baseFormat.getChannels()*2,
+                                        baseFormat.getSampleRate(),
+                                        false);
+            PCM_STREAM = AudioSystem.getAudioInputStream(decodedFormat,in);
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     // Is the given audio file a WAVE file?
     // *This method also sets the format, time, and audioFormat
     // of this WAVE file*
-    private boolean isWavFile() {
+    private boolean isMP3File() {
         try {
             format = AudioSystem.getAudioFileFormat(file);
-            System.out.print(format.getFormat());
             type = format.getType();
-            audioFormat =  format.getFormat();
-            System.out.print(format.getFormat());
-
-            return type.toString().equals("WAVE");
+            System.out.println(format.getType());
+            audioFormat =  format.getFormat();  
+            return type.toString().equals("MP3");
         }
         catch(Exception e) {
             return false;
@@ -87,20 +105,21 @@
     // Sets the PCM data from this WAVE file
     private void readFile() {
         try {
-            AudioInputStream fileIn =  AudioSystem.getAudioInputStream(file);
+            //AudioInputStream PCM_stream =  AudioSystem.getAudioInputStream(file);
             int subChunk2Size = (int) 
-                    (fileIn.getFrameLength() * 
+                    (PCM_STREAM.getFrameLength() * 
                     audioFormat.getChannels() * 
                     (audioFormat.getSampleSizeInBits()/8));
             byte[] pcm = new byte[subChunk2Size];
-            fileIn.skip(44);
-            fileIn.read(pcm);
+            PCM_STREAM.skip(44); //Frame size?
+            PCM_STREAM.read(pcm);
             thePCM = pcm;
         } 
         catch(Exception e) {
             System.out.println(e);
         }
     }
+    
     
     // Sets the PCM data from this WAVE file with only one channel
     private void makeMono() {
@@ -114,6 +133,7 @@
             }
         }
     }
+    
     //clarify endianness
     // Reads the sample from the mono PCM data.
     private void makeSamples() {
