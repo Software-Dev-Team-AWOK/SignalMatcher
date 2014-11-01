@@ -2,9 +2,13 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Helper class for launching LAME conversions
 public class LAME {
-	public static void convert(String infile, String outfile, List<String> opts){
+	//Uses a ProcessBuilder to launch a LAME conversion
+	//Between two given files, using given options
+	public static void convert(String infile, 
+								 String outfile, 
+								 List<String> opts){
 		ProcessBuilder lamePB = new ProcessBuilder();
         ArrayList<String> lameargs = new ArrayList<String>();
 				

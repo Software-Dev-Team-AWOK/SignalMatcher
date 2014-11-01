@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+//A class to represent a WAV file
 public class SimpleWav extends MusicFile {
 	    // This WAVE file's type, length in bytes, 
 		// length in sample frames, and format
@@ -50,11 +51,15 @@ public class SimpleWav extends MusicFile {
 				type = format.getType();
 				audioFormat =  format.getFormat();
 				if(!isAcceptableQuality()){
-					System.out.println("Error: " + this.file.getName() + " is not a supported format");
+					System.out.println("Error: " + 
+										this.file.getName() + 
+										" is not a supported format");
 					System.exit(1);
 				}
 			} catch (Exception e) {
-				System.out.println("Error: " + this.file.getName() + " is not a supported format");
+				System.out.println("Error: " +
+									this.file.getName() + 
+									" is not a supported format");
 				System.exit(1);
 			}			
 		}
@@ -84,8 +89,12 @@ public class SimpleWav extends MusicFile {
 		// Sets the PCM data from this WAVE file
 		private void readFile() {
 			try {
-				AudioInputStream fileIn =  AudioSystem.getAudioInputStream(file);
-				int subChunk2Size = (int) (fileIn.getFrameLength() * audioFormat.getChannels() * (audioFormat.getSampleSizeInBits()/8));
+				AudioInputStream fileIn =  
+						AudioSystem.getAudioInputStream(file);
+				int subChunk2Size = (int) 
+									(fileIn.getFrameLength() * 
+									 audioFormat.getChannels() * 
+									 (audioFormat.getSampleSizeInBits()/8));
 				byte[] pcm = new byte[subChunk2Size];
 				fileIn.skip(44);
 				fileIn.read(pcm);
@@ -114,7 +123,6 @@ public class SimpleWav extends MusicFile {
 				}
 			}
 		}
-		//clarify endianness
 		// Reads the sample from the mono PCM data.
 		public void makeSamples() {
 			readFile();
@@ -124,11 +132,10 @@ public class SimpleWav extends MusicFile {
 		    int paddedLength = findNextBiggestPowerOfTwo(sampleArrayLength);
 		    samples = new double[paddedLength];
 
-		    //long preSample;
-		    //double sample;
 		    int counter = 0;
 		    for(int i = 0; i < theMonoPCM.length; i+=bytesPerSample) {
-		    	double doubleSample = bytesToDouble(theMonoPCM, i, bytesPerSample);
+		    	double doubleSample = 
+		    			bytesToDouble(theMonoPCM, i, bytesPerSample);
 		        samples[i/bytesPerSample] = doubleSample;
 		        counter = i / bytesPerSample;
 		    }
@@ -137,6 +144,7 @@ public class SimpleWav extends MusicFile {
 		    }
 		}
 		
+		//private method to find the next biggest power of two
 		private int findNextBiggestPowerOfTwo(int n){
 			int powerOfTwo = 1;
 			while(powerOfTwo < n){
@@ -145,6 +153,9 @@ public class SimpleWav extends MusicFile {
 			return powerOfTwo;
 		}
 		
+		//Given a byte array, an index to star, and a length
+		//Return the short value that represents those two bytes
+		//in little-endian mode
 		private double bytesToDouble(byte[] arr, int startIndex, int len){
 			 ByteBuffer bb = ByteBuffer.allocate(len);
 		     bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -155,6 +166,7 @@ public class SimpleWav extends MusicFile {
 		     return (double)bb.getShort(0);   	 
 		}
 		
+		//Returns this wav's sampling rate
 		public float getSamplingRate(){
 			return sampleRate;
 		}

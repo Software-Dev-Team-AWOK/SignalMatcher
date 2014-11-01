@@ -1,3 +1,6 @@
+import main.SimpleSpectrogramImage;
+import main.SpectrogramImage;
+
 
 // A class that runs tests
 public class TestClass {

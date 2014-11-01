@@ -6,11 +6,13 @@ import java.util.Arrays;
 import java.util.Set;
 
 
-//This is a static helper class to create ArrayLists of MusicFile s from the input to the dan program
+//This is a static helper class to create ArrayLists of MusicFiles
+//from the input to the dan program
 public class FilesCreator {
-	//given a mode (-f|-d) and an inout (relative or absolute path) returns a list of MuicFiles 
-	//from the file/files specified
-	public static ArrayList<MusicFile> makeMusicFileSet(String mode, String input){
+	//given a mode (-f|-d) and an inout (relative or absolute path)
+	//returns a list of MuicFiles from the file/files specified
+	public static ArrayList<MusicFile> makeMusicFileList
+										(String mode, String input){
 		File inFile = new File(input);
 		checkExistsAndReadable(inFile);
 		
