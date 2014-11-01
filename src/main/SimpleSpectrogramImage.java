@@ -3,7 +3,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//This class represents a spectrogram image of a audio file
+//It describes the data of a file both in the frequency domain 
+//as well as the time domain
 public class SimpleSpectrogramImage {
 
 	String name;
@@ -17,78 +19,11 @@ public class SimpleSpectrogramImage {
     double[] test_amplitudes;
     //double[][] samples;
     double[] samples;
-    final float ACCEPTABLEDIFFERENCE = (float)0.4;
-
-   
-    public SimpleSpectrogramImage downsample(float newSampleRate, int len){
-    	//freq = sampling rate /2
-    	double newMaxFrequency = newSampleRate / 2.0;
-    	double newDeltaFreq = newMaxFrequency / (double)len;
-    	    	
-    	double[] newAmplitudes = new double[len];
-    	
-    	
-    	double currentIndexMinFrequency = 0;
-    	double currentIndexMaxFrequency;
-    	for(int i = 0; i < len; i++){
-    		currentIndexMaxFrequency = currentIndexMinFrequency + newDeltaFreq;
-    		int[] tofrom = getIndices(currentIndexMinFrequency, currentIndexMaxFrequency);
-    		double acc = 0;
-    		for(int j = tofrom[0]; j < tofrom[1]; j++){
-    			acc += amplitudes[j];
-    		}
-    		newAmplitudes[i] = acc;    			
-    		currentIndexMinFrequency += newDeltaFreq;
-    	}
-    	
-    	return new SimpleSpectrogramImage(this.name, newAmplitudes, newSampleRate, false);
-    }
+    final float ACCEPTABLEDIFFERENCE = (float)0.7;
     
-    public int[] getIndices(double fromFreq, double toFreq){
-    	int[] tofrom = new int[2];
-    	tofrom[0] = (int)Math.floor(fromFreq/deltaF);
-    	tofrom[1] = (int)Math.ceil(toFreq/deltaF);
-    	return tofrom;
-    }			
-
-    
-    public int getSampleLength(){
-    	return this.samples.length;
-    }
-    	
-    
-    
-    
-    public void compareSpectrogram(SimpleSpectrogramImage s){
-    	boolean comp = this.avgDifferenceInAmplitudes(s);
-    	if(comp){
-    		System.out.println("MATCH " + this.name + " " +  s.name);
-    	}
-    }
-    public boolean avgDifferenceInAmplitudes(SimpleSpectrogramImage s) {
-        /*
-         * Find average difference between the frequency domain images of these two signals.
-         */
-    	//System.out.println(this.name + " " + s.name);
-            if(s.amplitudes.length != this.amplitudes.length){
-            	//System.out.println("Lengths are off");
-            	return false;
-            }
-            
-            float difference = 0;
-            for(int i = 0; i < amplitudes.length; i++){
-                difference += Math.abs(this.amplitudes[i] - s.amplitudes[i]); 
-            }
-            float avgDifference = difference / ((float) amplitudes.length);
-        	//System.out.println(avgDifference);
-        	//System.out.println(avgDifference <= ACCEPTABLEDIFFERENCE);
-
-
-          
-            return avgDifference <= ACCEPTABLEDIFFERENCE;
-      }
-
-    SimpleSpectrogramImage(String name, double[] inputs, float samplingRate, boolean transform) {
+    //Constructor, transforms data if transform variable is true
+    SimpleSpectrogramImage(String name, double[] inputs, 
+    						float samplingRate, boolean transform) {
     	this.name = name;
     	if(transform){
     		this.samples = inputs;
@@ -105,12 +40,96 @@ public class SimpleSpectrogramImage {
     	}
 
     }
+
+   //This downsamples a file to a specific sampling rate by combining the 
+    //various components of the frequency domain to appear as if it is 
+    //of a lower sampling rate. 
+    public SimpleSpectrogramImage downsample(float newSampleRate, int len){
+    	//freq = sampling rate /2
+    	//System.out.println("Downsampling");
+    	//Nyquist frequency of new rate
+    	double newMaxFrequency = newSampleRate / 2.0;
+    	double newDeltaFreq = newMaxFrequency / (double)len;
+    	
+    	//the amplitudes to be returned
+    	double[] newAmplitudes = new double[len];
+    	
+    	//Go through new array and combine elements of original array 
+    	// to match length and change in frequency
+    	double currentIndexMinFrequency = 0;
+    	double currentIndexMaxFrequency;
+    	for(int i = 0; i < len; i++){
+    		currentIndexMaxFrequency = currentIndexMinFrequency 
+    									+ newDeltaFreq;
+    		int[] tofrom = getIndices(currentIndexMinFrequency, 
+    								   currentIndexMaxFrequency);
+    		double acc = 0;
+    		for(int j = tofrom[0]; j < tofrom[1]; j++){
+    			acc += amplitudes[j];
+    		}
+    		newAmplitudes[i] = acc;    			
+    		currentIndexMinFrequency += newDeltaFreq;
+    	}
+    	
+    	return new SimpleSpectrogramImage(this.name, 
+    										newAmplitudes, 
+    										newSampleRate, false);
+    }
     
+    //Finds the indices of the original array between which the requested
+    //values are located
+    public int[] getIndices(double fromFreq, double toFreq){
+    	int[] tofrom = new int[2];
+    	tofrom[0] = (int)Math.floor(fromFreq/deltaF);
+    	tofrom[1] = (int)Math.ceil(toFreq/deltaF);
+    	return tofrom;
+    }			
+
+    //Gets the number of samples
+    public int getSampleLength(){
+    	return this.samples.length;
+    }
+    
+    //Compares this sectrogram to another and prints a match if they match
+    public void compareSpectrogram(SimpleSpectrogramImage s){
+    	boolean comp = this.avgDifferenceInAmplitudes(s);
+    	if(comp){
+    		System.out.println("MATCH " + this.name + " " +  s.name);
+    	}
+    }
+    
+    public boolean avgDifferenceInAmplitudes(SimpleSpectrogramImage s) {
+        /*
+         * Find average difference between the frequency 
+         * domain images of these two signals.
+         */
+    	 //System.out.println(this.name + " " + s.name);
+            if(s.amplitudes.length != this.amplitudes.length){
+            	//System.out.println("Lengths are off");
+            	return false;
+            }
+            
+            float difference = 0;
+            for(int i = 0; i < amplitudes.length; i++){
+                difference += Math.abs(this.amplitudes[i] - s.amplitudes[i]); 
+            }
+            float avgDifference = difference / ((float) amplitudes.length);
+        	//System.out.println(avgDifference);
+        	//System.out.println(avgDifference <= ACCEPTABLEDIFFERENCE);
+
+            return avgDifference <= ACCEPTABLEDIFFERENCE;
+      }
+
+
+    //returns the sampole rate
     public float getSamplingRate(){
     	return this.samplingRate;
     }
     /**
-     * Javadocs description of code at http://www.developer.com/java/other/article.php/3380031/Spectrum-Analysis-using-Java-Sampling-Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm
+     * Javadocs description of code at 
+     * http://www.developer.com/java/other/article.php/3380031/
+     * 		Spectrum-Analysis-using-Java-Sampling-
+     * 		Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm
      * Used with Professor William Clinger's permission on Piazza post :
      * 
      */

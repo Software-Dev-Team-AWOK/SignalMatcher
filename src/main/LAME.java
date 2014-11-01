@@ -25,7 +25,8 @@ public class LAME {
 			lameP = lamePB.start();
 			lameP.waitFor();
 		}catch (Exception e){
-			System.out.println("ERROR: Error converting MP3 to WAV: "+ e.getMessage());
+			System.out.println("ERROR: Error converting MP3 to WAV: "
+					+ e.getMessage());
 			System.exit(1);
 		}
 	}

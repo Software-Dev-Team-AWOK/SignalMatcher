@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
+//A class to represent Spectrogram images
+//Chunks the input array
 public class SpectrogramImage {
 
     double[] real_part;
@@ -25,14 +26,16 @@ public class SpectrogramImage {
 
     public boolean avgDifferenceInAmplitudesCheck(SpectrogramImage s) {
     /*
-    * Find average difference between the frequency domain images of these two signals.
+    * Find average difference between the frequency domain images
+    * of these two signals.
     */
     	//System.out.println(this.name + " " + s.name);
         float avgDifference = 0;
         float totalSize = (float) amplitudes.length*amplitudes[1].length;
         
         
-            if(s.amplitudes.length != this.amplitudes.length) //Need additional check for 'width'
+            if(s.amplitudes.length != this.amplitudes.length) 
+            	//Need additional check for 'width'
             	return false;
             float difference = 0;
             for(int i = 0; i < amplitudes.length; i++) {
