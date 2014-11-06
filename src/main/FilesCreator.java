@@ -5,17 +5,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * This is a static helper class to create ArrayLists of MusicFiles
+ * from the input to the dan program
+ * 
+ * @author Ariel Winton, Jansen Kantor, Nnamdi Okeke, Rani Aljondi
+ */
 
-//This is a static helper class to create ArrayLists of MusicFiles
-//from the input to the dan program
 public class FilesCreator {
-	//given a mode (-f|-d) and an inout (relative or absolute path)
-	//returns a list of MuicFiles from the file/files specified
+	/**
+	 * Reads the command line command
+	 * @param mode -f|-d
+	 * @param input Relative or absolute path
+	 * @return A list of MusicFiles from the file/files specified
+	 */
 	public static ArrayList<MusicFile> makeMusicFileList
-										(String mode, String input){
+	(String mode, String input){
 		File inFile = new File(input);
 		checkExistsAndReadable(inFile);
-		
+
 		if(mode.equals("-f")){
 			return makeSingleFileList(inFile);
 		} else if (mode.equals("-d")){
@@ -25,11 +33,13 @@ public class FilesCreator {
 			System.exit(1);
 			return null;
 		}
-		
+
 	}
-	
-	//Checks to make sure that the file/directory specified 
-	//both exists and is readable
+
+	/**
+	 * Ensures that a file exists and is readable
+	 * @param inFile Input file
+	 */
 	public static void checkExistsAndReadable(File inFile){
 		if(!inFile.exists()){
 			System.out.println("ERROR: "+ 
@@ -41,43 +51,55 @@ public class FilesCreator {
 			System.exit(1);
 		}
 	}
-	
-	//Given a file, returns an ArrayList containing a 
-	//single MusicFile, representing the input file
+
+
+	/**
+	 * Creates an ArrayList with the given input file
+	 * @param file Input file
+	 * @return An ArrayList containing the given input file
+	 */
 	public static ArrayList<MusicFile> makeSingleFileList(File file){
 		ArrayList<MusicFile> result = new ArrayList<MusicFile>();
 		result.add(makeMusicFile(file));
 		return result;		
 	}
-	
-	//Given a directory, returns an ArrayList containing MusicFiles 
-	//representing the files inside the given directory
+
+	/**
+	 * Creates an ArrayList containing each of the files in the 
+	 * given directory
+	 * @param dir Input directory
+	 * @return An ArrayList containing each of the files in the
+	 * given directory
+	 */
 	public static ArrayList<MusicFile> makeDirectoryList(File dir){
-				
+
 		if (!dir.isDirectory()) {
 			System.out.println("ERROR: "+ 
 					dir.getName() + " is not a directory");
 			System.exit(1);
 		} 
-		
+
 		File[] files = dir.listFiles();
 		if (files.length == 0){
 			// One directory is empty, there are no comparisons 
 			// to do, so we can immediately exit
 			System.exit(0);
 		}
-				
+
 		ArrayList<MusicFile> result = new ArrayList<MusicFile>();
 		for(File file : Arrays.asList(files)){
 			result.add(makeMusicFile(file));
 		}
-		
+
 		return result;
-		
+
 	}
-	
-	//Make a specific type of musicfile based on the
-	//file extension
+
+	/**
+	 * Makes a MusicFile using the given file
+	 * @param file Input file
+	 * @return A MusicFile containing the given file
+	 */
 	public static MusicFile makeMusicFile(File file){
 		String fileName = file.getName();
 		MusicFile musicFile = null;
@@ -90,7 +112,7 @@ public class FilesCreator {
 					file.getName() + " is not a supported format");
 			System.exit(1);
 		}
-		
+
 		return musicFile;
 	}
 

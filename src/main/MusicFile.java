@@ -1,62 +1,98 @@
 package main;
 
 import java.io.File;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-//Abstract class to represtent all music files.
+/**
+ * Abstract class to represent all music files
+ * @author Ariel Winton, Jansen Kantor, Nnamdi Okeke, Rani Aljondi
+ *
+ */
 public abstract class MusicFile {
-		public File file;
-		protected double[] samples;
-		//constructors
-		public MusicFile(){}
-		
-		public MusicFile(String path){
-			file = new File(path);
-			samples = null;
-			checkExistsAndIsFile();
+	/**
+	 * A file
+	 */
+	public File file;
+	/**
+	 * A sample array made from the raw data of the file
+	 */
+	protected double[] samples;
+	/**
+	 * Creates an instance of a MusicFile
+	 */
+	public MusicFile(){}
+	/**
+	 * Creates an instance of a MusicFile with a file
+	 * created using the given path
+	 * 
+	 * Sets samples to null
+	 * 
+	 * @param path Path to a file
+	 */
+	public MusicFile(String path){
+		file = new File(path);
+		samples = null;
+		checkExistsAndIsFile();
+	}
+
+	/**
+	 * Sets file to the given file
+	 * 
+	 * Creates an instance of a MusicFile using the given file
+	 * 
+	 * @param file A file
+	 */
+	public MusicFile(File file){
+		this.file = file;
+		samples = null;
+		checkExistsAndIsFile();
+	}
+
+	/**
+	 * Checks that file exists and is readable
+	 */
+	private void checkExistsAndIsFile(){
+		if(!file.exists()){
+			System.out.println("ERROR: " + 
+					file.getName() + 
+					" does not exist");
+			System.exit(1);
+		} else if (!file.isFile()){
+			System.out.println("ERROR: " + 
+					file.getName() +
+					" is not a file");
+			System.exit(1);
 		}
-		
-		public MusicFile(File file){
-			this.file = file;
-			samples = null;
-			checkExistsAndIsFile();
-		}
-		//Checks that the given file both exists and is readble.
-		private void checkExistsAndIsFile(){
-			if(!file.exists()){
-				System.out.println("ERROR: " + 
-									file.getName() + 
-									" does not exist");
-				System.exit(1);
-			} else if (!file.isFile()){
-				System.out.println("ERROR: " + 
-									file.getName() +
-									" is not a file");
-				System.exit(1);
-			}
-		}
-		
-		//Returns the samples from this music file
-		// creating them if they have not already been created
-		public double[] getSamples(){
-			if(samples == null){
-				makeSamples();
-			} 
-			return samples;
-		}
-		//returns the name of the music file
-		public String getName(){
-			return file.getName();
-		}
-		
-		//Create the samples array from the raw data of the file
-		public abstract void makeSamples();
-		
-		//Get the sampling rate of the file.
-		public abstract float getSamplingRate();
+	}
+
+	/**
+	 * Creates an array of raw data samples from file
+	 * 
+	 * @return An array of raw data samples from file
+	 */
+	public double[] getSamples(){
+		if(samples == null){
+			makeSamples();
+		} 
+		return samples;
+	}
+
+	/**
+	 * Gets the name of file
+	 * 
+	 * @return The name of file
+	 */
+	public String getName(){
+		return file.getName();
+	}
+
+	/**
+	 * Makes an array of raw data samples from file
+	 */
+	public abstract void makeSamples();
+
+	/**
+	 * Gets the sampling rate of file
+	 * 
+	 * @return The sampling rate of file
+	 */
+	public abstract float getSamplingRate();
 }
