@@ -16,7 +16,7 @@ public class LAME {
 	 * 
 	 * @param infile A path to a file to be converted
 	 * @param outfile A name for the converted output file
-	 * @param opts Format options for the output WAV file
+	 * @param opts Format options for the output WAV file.
 	 */
 	public static void convert(String infile, 
 			String outfile, 
