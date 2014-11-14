@@ -8,9 +8,10 @@ public class FingerPrint {
 	private double[] bands = new double[10]; 	//Array of cut down chunk.
 	private String name;	// Name of the song
 	private int location; 	//Location in a file as the index of a chunk
-	private List<Integer> constants ; // Constants used in the hashing function
+	private List<Integer> constants ; //Constants used in the hashing function
 
-	public FingerPrint(double[] bands, String name, int location, List<Integer> constants) {
+	public FingerPrint(double[] bands, String name, int location,
+			List<Integer> constants) {
 		this.bands = bands;
 		this.name = name;
 		this.location = location;

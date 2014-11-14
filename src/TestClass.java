@@ -10,7 +10,8 @@ public class TestClass {
 		// Example file paths 
 		String path1 = "C:\\Users\\Rani\\Desktop\\Samples\\z02.wav";
 		String path2 = "C:\\Users\\Rani\\Desktop\\Samples\\z04.wav";
-		String path3 = "/course/cs4500f14/Assignments/A4/bad_guy_in_yer_bar.mp3";
+		String path3 = "/course/cs4500f14/Assignments/"
+				+ "A4/bad_guy_in_yer_bar.mp3";
 		String path4 = "/course/cs4500f14/Assignments/A4/Sor3508.mp3";
 
 		try {
@@ -20,17 +21,21 @@ public class TestClass {
 		    switch(testmode) {
 		        case 0: {
 		            Wav cwav1 = new Wav(path1);
-		            SpectrogramImage cimg = new SpectrogramImage(cwav1.getSamples());
+		            SpectrogramImage cimg = new 
+		            		SpectrogramImage(cwav1.getSamples());
 		            Wav cwav2 = new Wav(path2);
-		            SpectrogramImage cimg2 = new SpectrogramImage(cwav2.getSamples());
+		            SpectrogramImage cimg2 = new 
+		            		SpectrogramImage(cwav2.getSamples());
 		            System.out.println(cimg.equals(cimg2));
 		            break;
 		        }
 		        case 1: {
 		            SimpleWav swav1 = new SimpleWav(path1);
-		            SimpleSpectrogramImage simg = new SimpleSpectrogramImage(swav1.getSamples());
+		            SimpleSpectrogramImage simg = new 
+		            		SimpleSpectrogramImage(swav1.getSamples());
 		            SimpleWav swav2 = new SimpleWav(path2);
-		            SimpleSpectrogramImage simg2 = new SimpleSpectrogramImage(swav2.getSamples());
+		            SimpleSpectrogramImage simg2 = new 
+		            		SimpleSpectrogramImage(swav2.getSamples());
 		            System.out.println(simg.equals(simg2));
 		            break;
 
@@ -38,9 +43,11 @@ public class TestClass {
 		        
 		        case 2: {
 		            SimpleWav swav1 = new SimpleWav(path1);
-		            SpectrogramImage cimg = new SpectrogramImage(swav1.getSamples());
+		            SpectrogramImage cimg = new 
+		            		SpectrogramImage(swav1.getSamples());
 		            SimpleWav swav2 = new SimpleWav(path2);
-		            SpectrogramImage cimg2 = new SpectrogramImage(swav2.getSamples());
+		            SpectrogramImage cimg2 = new 
+		            		SpectrogramImage(swav2.getSamples());
                     System.out.println(cimg.equals(cimg2));
                     break;
 		        }

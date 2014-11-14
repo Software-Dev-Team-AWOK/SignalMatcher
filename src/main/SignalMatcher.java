@@ -2,14 +2,16 @@ package main;
 
 import java.util.ArrayList;
 /**
- * Converts MusicFile objects to SpectrogramImage objects, and performs comparisons.
+ * Converts MusicFile objects to SpectrogramImage objects,
+ *  and performs comparisons.
  * 
  * @author Ariel Winton, Jansen Kantor, Nnamdi Okeke, Rani Aljondi
  *
  */
 public class SignalMatcher {
 	/**
-	 * Converts MusicFile objects to SpectrogramImage objects, and performs comparisons.
+	 * Converts MusicFile objects to SpectrogramImage objects, 
+	 * and performs comparisons.
 	 * 
 	 * @param args MusicFiles to be compared
 	 */
@@ -78,7 +80,8 @@ public class SignalMatcher {
 	 * 
 	 * @param smaller A SpectrogramImage
 	 * @param larger A SpectrogramImage
-	 * @param smallerFirst Is the smaller SpectrogramImage the first argument?
+	 * @param smallerFirst Is the smaller SpectrogramImage the 
+	 * first argument?
 	 */
 	private static void compareDiffSamplingRates
 	(SimpleSpectrogramImage smaller, SimpleSpectrogramImage larger, 

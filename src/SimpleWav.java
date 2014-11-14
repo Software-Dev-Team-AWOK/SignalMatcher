@@ -83,7 +83,9 @@ public class SimpleWav {
 	private void readFile() {
 		try {
 			AudioInputStream fileIn =  AudioSystem.getAudioInputStream(file);
-			int subChunk2Size = (int) (fileIn.getFrameLength() * audioFormat.getChannels() * (audioFormat.getSampleSizeInBits()/8));
+			int subChunk2Size = (int) (fileIn.getFrameLength() * 
+					audioFormat.getChannels() * 
+					(audioFormat.getSampleSizeInBits()/8));
 			byte[] pcm = new byte[subChunk2Size];
 			fileIn.skip(44);
 			fileIn.read(pcm);
