@@ -8,6 +8,7 @@ public class FingerPrint {
     //We are keeping this value constant for now
 	private double[] bands; 	//Array of cut down chunk.
 	private double[] amplitudes;
+	private int[] testData; 
 	private String name;	// Name of the song
 	private int location; 	//Location in a file as the index of a chunk
 	public FingerPrint(double[] samples, String name, int location, List<Integer> constants) {
@@ -17,6 +18,24 @@ public class FingerPrint {
 		bandFilter();
 		this.name = name;
 		this.location = location;
+	}
+	/*
+	public FingerPrint(double[] amplitudes) {
+	    this.amplitudes = new double[amplitudes.length];
+	       for(int i = 0; i<amplitudes.length; i++)
+	            this.amplitudes[i] = amplitudes[i];
+	       
+
+	}
+	
+	public FingerPrint(int[] testData) {
+	    this.testData = new int[testData.length];
+	    for(int i = 0; i<testData.length; i++)
+	        this.testData[i] = testData[i];
+	}
+	*/
+	public int[] getTestData() {
+	    return testData;
 	}
 	/*
 	 * 
@@ -30,8 +49,23 @@ public class FingerPrint {
 	 * band[10] = amplitudes[511] +...+amplitudes[1023]
 	 */
 	public void bandFilter() {
-	    
-	}
+	    int window = 1;
+	    int pointer = 1;
+	    for(int i = 0; i < Utils.lg(amplitudes.length); i++){
+	    bands[i] = addBand(pointer, window, amplitudes);
+	    pointer += window;
+	    window *= 2;
+	    }
+
+	    }
+
+	    private double addBand(int start, int length, double[] amplitudes){
+	    double acc = 0;
+	    for(int i = start; i < start + length; i++){
+	    acc += amplitudes[i];
+	    }
+	    return acc;
+	    }
 	
 	public double[] getBands() {
 		return bands;
@@ -64,10 +98,10 @@ public class FingerPrint {
 	public int hashCode() {
 		double result = 0;
 		
-		for (int i = 0; i < bands.length; i++) {
-			result =  10*result + bands[i];  
+		for (int i = 0; i < testData.length; i++) {
+			result =  ((10*result) + testData[i])%1031;  
 		}
-		
+        //System.out.println(result);
 		return (int)result;
 	}
 	
