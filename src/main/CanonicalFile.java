@@ -58,12 +58,7 @@ public class CanonicalFile {
 			System.exit(1);
 		} */
 	}
-	
-	//reads in a fragment sized chunk of data 
-	//from which a FingerPrint array will be made.
-	//5 seconds at a time. 5 seconds = 5 * getSample
-	
-	
+
 	//reads in a chunk of data from which a FingerPrint array will be made. 
 	public Fingerprint[] fingerprintFile(){
 		try{

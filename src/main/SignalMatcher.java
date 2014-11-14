@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * Converts MusicFile objects to SpectrogramImage objects,
  *  and performs comparisons.
@@ -23,12 +24,29 @@ public class SignalMatcher {
 	public static void main(String[] args){
 		// Checks that the given command line arguments are valid
 		checkArgs(args);
+		ArrayList<Fingerprint[]> fi1 = new ArrayList<Fingerprint[]>();
+	    ArrayList<Fingerprint[]> fi2 = new ArrayList<Fingerprint[]>();
 
 		ArrayList<CanonicalFile> f1 = createCanonicalFiles(args[0], args[1], temp1);
 		ArrayList<CanonicalFile> f2 = createCanonicalFiles(args[2], args[3], temp2);
 		
-		f1.get(0).fingerprintFile();
+		//Location of all fingerprints for 
+		HashMap<Integer,Fingerprint> h1 = new HashMap<Integer,Fingerprint>();
+		for(int i = 0; i<f1.size(); i++) {
+		    fi1.add(f1.get(i).fingerprintFile());
+		    for(int j = 0; j<fi1.size(); j++)
+		        h1.put(fi1.get(i)[j].hashCode(), fi1.get(i)[j]);
+		}
 		
+
+        //Location of all fingerprints for 
+        HashMap<Integer,Fingerprint> h2 = new HashMap<Integer,Fingerprint>();
+        for(int i = 0; i<f2.size(); i++) {
+            fi2.add(f2.get(i).fingerprintFile());
+            for(int j = 0; j<fi2.size(); j++)
+                h2.put(fi2.get(i)[j].hashCode(), fi2.get(i)[j]);
+        }
+        
 		System.exit(0);
 	}
 	
