@@ -23,7 +23,9 @@ public class Fragment {
         int num_substrings = this.length() - input.length();
         Hashtable<Integer,Fragment> hash = new Hashtable<Integer,Fragment>();
         for(int i=0;i<num_substrings;i++) {
-            Fragment sub = new Fragment(Arrays.copyOfRange(this.fingerprints, i, i+input.length()));
+            Fragment sub = 
+            		new Fragment(Arrays.copyOfRange(this.fingerprints, 
+            										i, i+input.length()));
             hash.put(sub.hashCode(), sub);
         }
         return hash.containsKey(input.hashCode());
