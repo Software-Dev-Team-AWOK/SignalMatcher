@@ -1,0 +1,8 @@
+#!/bin/bash
+mkdir /tmp/SignalMatcher
+mkdir /tmp/SignalMatcher/D1
+mkdir /tmp/SignalMatcher/D2
+$ret = java SignalMatcher $*
+rm -r /tmp/SignalMatcher
+exit $ret
+ 
